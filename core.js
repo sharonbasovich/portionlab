@@ -1,5 +1,7 @@
 // Exact arithmetic: no binary floating-point arithmetic enters recipe quantities.
-export const MAX_FILE_BYTES = 100_000;
+// Every schema-valid pretty JSON export fits below this UTF-8 ceiling.
+// See docs/BACKUP_SIZE.md for the conservative bound and regression contract.
+export const MAX_FILE_BYTES = 150_000;
 export const MAX_INGREDIENTS = 80;
 const MAX_COMPONENT = 999_999_999_999n;
 const glyphs = { '¼':'1/4','½':'1/2','¾':'3/4','⅐':'1/7','⅑':'1/9','⅒':'1/10','⅓':'1/3','⅔':'2/3','⅕':'1/5','⅖':'2/5','⅗':'3/5','⅘':'4/5','⅙':'1/6','⅚':'5/6','⅛':'1/8','⅜':'3/8','⅝':'5/8','⅞':'7/8' };
@@ -88,7 +90,7 @@ export function validateRecipe(data) {
 }
 export function exportRecipe(recipe) { return JSON.stringify({format:'portionlab',version:1,recipe:validateRecipe(recipe)},null,2)+'\n'; }
 export function importRecipe(source) {
-  if (typeof source!=='string' || new TextEncoder().encode(source).length>MAX_FILE_BYTES) throw new Error('Choose a PortionLab JSON file smaller than 100 KB.');
+  if (typeof source!=='string' || new TextEncoder().encode(source).length>MAX_FILE_BYTES) throw new Error(`Choose a PortionLab JSON file of at most ${MAX_FILE_BYTES.toLocaleString('en-US')} UTF-8 bytes.`);
   let data; try {data=JSON.parse(source);} catch {throw new Error('This is not valid JSON. Choose a file downloaded from PortionLab.');}
   keys(data,['format','version','recipe'],'File');
   if (data.format!=='portionlab' || data.version!==1) throw new Error('This file is not a supported PortionLab version 1 recipe.');

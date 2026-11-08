@@ -70,7 +70,9 @@ rationals; decimals remain decimal when an exact result of at most six places
 exists, otherwise an exact fraction is shown. There is no rounding.
 
 At most 80 ingredient rows; title 100 characters, ingredient name 160, unit
-40. Import accepts at most 100,000 UTF-8 bytes and exactly this versioned shape:
+40. Import accepts at most 150,000 UTF-8 bytes (inclusive). This ceiling covers
+every schema-valid exported recipe; see [backup size contract](docs/BACKUP_SIZE.md).
+Import accepts exactly this versioned shape:
 
 ```json
 {

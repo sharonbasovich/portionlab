@@ -169,7 +169,7 @@ $('file').addEventListener('change',async()=>{
   const generation=++importGeneration;
   pendingImport=null;error('import-error','');$('apply-import').disabled=true;$('import-preview').replaceChildren();$('import-dialog').showModal();
   try{
-    if(file.size>MAX_FILE_BYTES)throw new Error('Choose a PortionLab JSON file smaller than 100 KB.');
+    if(file.size>MAX_FILE_BYTES)throw new Error(`Choose a PortionLab JSON file of at most ${MAX_FILE_BYTES.toLocaleString('en-US')} UTF-8 bytes.`);
     const imported=importRecipe(await file.text());
     // A cancelled/closed preview cannot be resurrected by an asynchronous file read.
     if(!$('import-dialog').open || generation!==importGeneration)return;

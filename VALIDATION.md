@@ -5,13 +5,13 @@ production service or a tested cooking method.
 
 ## Automated checks
 
-`npm test` runs 35 tests with Node's built-in test runner. They cover exact
+`npm test` runs 39 tests with Node's built-in test runner. They cover exact
 arithmetic (including 5,000 seeded cases), input validation, synthetic JSON
 fixtures, persistence, recovery, Undo and targeted interaction callbacks.
 Some interaction checks use stubs and extracted callback bodies. These are
 not a substitute for running the app in a browser.
 
-The optional `regression` suite contains 10 DOM test groups covering raw
+The optional `regression` suite contains 11 DOM test groups covering raw
 line-break preservation, draft edits and pending-target reconciliation.
 Install its test-only dependency and run it separately:
 
@@ -22,12 +22,11 @@ node --test regression/*.test.cjs
 
 This does not add an app/runtime dependency. The harness uses a simulated DOM,
 including stubbed dialogs and file selection; it does not verify native browser
-prompts, printing, file chooser behavior or accessibility. These 10 groups
-passed during development.
+prompts, printing, file chooser behavior or accessibility. These 11 groups passed for this maintenance update.
 
-## Actual Chromium checks
+## Actual Chromium checks (prior public baseline)
 
-A bounded browser pass verified:
+A bounded browser pass on public baseline b5bcaddd verified:
 
 - Import through the file chooser, export through a completed download, and
   byte-for-byte comparison of saved JSON for unchanged and edited recipes.
@@ -41,6 +40,15 @@ A bounded browser pass verified:
 - Keyboard focus wrapping in the narrow editor and clean Escape dismissal.
 
 These narrow-frame checks are not physical-phone or touch-device acceptance.
+
+## Maintenance update validation
+
+The 150,000-byte backup ceiling passed 39 source tests and 11 optional JSDOM
+groups. New checks cover the old compact/pretty mismatch, exact saved-reload
+recovery, maximal strings, UTF-8 rather than character counts, and the inclusive
+file-size boundary. See `docs/BACKUP_SIZE.md` for the conservative bound. These
+are automated checks only; native file chooser/export and actual-browser
+acceptance have not been rerun for this maintenance update.
 
 ## Remaining limits
 
