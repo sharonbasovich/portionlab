@@ -195,6 +195,6 @@ for(const dialog of [$('editor'),$('import-dialog')])dialog.addEventListener('ke
 window.addEventListener('storage',()=>{if(store.checkExternal()){render();announce('Another tab changed the saved recipe. Your current copy and draft are preserved.');}});
 window.addEventListener('resize',()=>render());
 window.addEventListener('beforeunload',event=>{
-  if(targetDirty || store.recipeUnsaved || (store.warning && store.draftDirty())){event.preventDefault();event.returnValue='';}
+  if(targetDirty || store.recipeUnsaved || store.draftDirty()){event.preventDefault();event.returnValue='';}
 });
 render();

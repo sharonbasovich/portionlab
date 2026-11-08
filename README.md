@@ -42,6 +42,9 @@ Unit checks do not establish browser behavior.
 - Unfinished recipe drafts are saved to this tab's session storage on input,
   including incomplete fields. Reload offers **Resume draft**. Complete or
   discard a waiting draft before loading, scaling, or undoing another recipe.
+  Recovery is tab-scoped, not guaranteed after closing the tab and opening a
+  fresh one. Dirty drafts request a best-effort leaving-page warning, including
+  on reload. Browsers may suppress this prompt, especially without prior interaction.
 - Applied recipes are saved to local storage when available. **Undo last
   change** restores one applied change, including an import, during this page
   session. Repeating unchanged portions, applying an unchanged recipe, or
