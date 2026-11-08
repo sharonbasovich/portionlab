@@ -1,0 +1,10 @@
+{
+  "format": "portionlab",
+  "version": 1,
+  "recipe": {
+    "title": "My first recipe",
+    "basePortions": "4",
+    "targetPortions": "6",
+    "ingredients": []
+  }
+}

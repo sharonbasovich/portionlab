@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f9f6e9">
+  <meta name="description" content="Scale recipe quantities exactly. Keep the original, choose your portions, and take a clear kitchen sheet with you.">
+  <title>PortionLab — A recipe, resized.</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#workbench">Skip to recipe</a>
+  <header class="masthead">
+    <a class="wordmark" href="./" aria-label="PortionLab home"><svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="15"/><circle cx="18" cy="18" r="10"/><path d="M18 8v20M8 18h20"/></svg>PortionLab<span class="brand-dot">.</span></a>
+    <nav aria-label="Recipe tools"><button id="download">Download JSON</button><button id="load">Load JSON</button><button id="print" class="ink">Print sheet</button></nav>
+    <input id="file" type="file" accept=".json,application/json" hidden>
+  </header>
+  <main id="workbench" tabindex="-1">
+    <div id="warning" class="notice warning" role="alert" hidden></div>
+    <div id="resume" class="notice" hidden><span>An unfinished recipe draft is waiting.</span><button id="resume-draft">Resume draft</button></div>
+    <section class="workbench" aria-label="Recipe scaling workbench">
+      <div class="recipe-intro">
+        <p class="intro">A recipe, resized.</p>
+        <h1 id="recipe-title"></h1>
+        <button id="edit" class="text-button">Edit recipe <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 4 4 4M4 12l9-9a2 2 0 0 1 3 3l-9 9-4 1z"/></svg></button>
+        <form id="scale-form" novalidate>
+          <div class="portion-inputs">
+            <div class="original-portions"><span id="original-label">Original portions</span><strong id="base-value" aria-labelledby="original-label"></strong></div>
+            <svg class="direction" viewBox="0 0 40 24" aria-hidden="true"><path d="M2 12h34M27 3l9 9-9 9"/></svg>
+            <label class="target-portions" for="target">Target portions<input id="target" name="target" maxlength="48" inputmode="text" autocomplete="off" aria-describedby="target-help target-error"></label>
+          </div>
+          <div class="scale-action"><button type="submit" class="ink">Update portions</button><span id="factor"></span></div>
+          <p class="helper" id="target-help">Fractions welcome: 1/3 or 1 1/2.</p>
+          <p id="target-error" class="error" role="alert" hidden></p>
+          <p id="target-pending" class="helper" hidden></p>
+        </form>
+      </div>
+      <figure class="portion-figure">
+        <div class="plates" aria-hidden="true"><div class="plate-group"><div id="plate-original" class="plate original-plate"><div></div></div><span>Original</span></div><div class="plate-group"><div id="plate-target" class="plate target-plate"><div></div></div><span>Your batch</span></div></div>
+        <figcaption id="plate-caption"></figcaption><p class="figure-note">Same recipe. A different place at the table.</p>
+      </figure>
+    </section>
+    <section class="ingredients" aria-labelledby="ingredients-title">
+      <div class="sheet-heading"><div><h2 id="ingredients-title">Your kitchen sheet</h2><p id="sheet-description"></p></div><div class="undo-area"><span id="change-note"></span><button id="undo" hidden>Undo last change</button></div></div>
+      <table><caption class="sr-only">Ingredient quantities before and after scaling. Units remain as written.</caption><colgroup><col class="ingredient-col"><col class="quantity-col"><col class="quantity-col"></colgroup><thead><tr><th scope="col">Ingredient</th><th scope="col">Original <span id="base-heading"></span></th><th scope="col" class="scaled-heading">Your batch <span id="target-heading"></span></th></tr></thead><tbody id="ingredient-rows"></tbody></table>
+      <div id="empty" class="empty" hidden><h3>Start with an ingredient.</h3><p>Add a quantity, a unit, and a name to build your first kitchen sheet.</p><button id="add-first" class="ink">Add ingredients</button></div>
+      <p class="measurement-note">Units stay exactly as written. PortionLab scales amounts; it does not convert cups to grams or infer ingredient density. Unmeasured ingredients stay as written.</p>
+    </section>
+    <footer class="footer"><p>Made for the way your table changes.</p><p id="storage-status">Local to this browser. Download JSON for a portable copy.</p></footer>
+    <p id="status" class="sr-only" role="status" aria-live="polite"></p>
+  </main>
+  <dialog id="editor" aria-labelledby="editor-title" aria-describedby="editor-help">
+    <form id="recipe-form" novalidate>
+      <div class="dialog-heading"><div><h2 id="editor-title">Make it your recipe.</h2><p id="editor-help">Edit the original. Your kitchen sheet scales from these amounts.</p></div><button type="button" id="close-editor" aria-label="Close recipe editor" class="close-button">×</button></div>
+      <div class="recipe-fields"><label>Recipe title<input id="draft-title" maxlength="100" autocomplete="off" required></label><label>Original portions<input id="draft-base" maxlength="48" autocomplete="off" required></label></div>
+      <p class="helper">Use numbers, fractions or mixed numbers. Leave quantity blank for an unmeasured ingredient. Units are labels, such as cups, g, or pieces.</p>
+      <div class="editor-columns" aria-hidden="true"><span>Quantity</span><span>Unit</span><span>Ingredient</span><span></span></div>
+      <div id="draft-rows"></div>
+      <div class="row-tools"><button id="add-row" type="button">Add ingredient</button><button id="undo-remove" type="button" hidden>Undo removal</button><span id="row-count" class="helper"></span></div>
+      <p id="editor-error" class="error" role="alert" hidden></p>
+      <div id="draft-decision" class="decision" hidden role="group" aria-labelledby="decision-text"><p id="decision-text"></p><button id="keep-editing" type="button">Keep editing</button><button id="confirm-decision" type="button" class="danger"></button></div>
+      <div class="dialog-actions"><button id="reset-draft" type="button" class="text-button">Reset draft</button><span></span><button id="cancel-editor" type="button">Cancel</button><button type="submit" class="ink">Apply recipe</button></div>
+      <p class="helper draft-note">Unfinished edits are kept in this tab across reloads when browser storage is available. Apply recipe to update the sheet.</p>
+    </form>
+  </dialog>
+  <dialog id="import-dialog" aria-labelledby="import-title"><div class="dialog-heading"><h2 id="import-title">Load a recipe</h2><button id="close-import" class="close-button" aria-label="Close import preview">×</button></div><div id="import-preview"></div><p id="import-error" class="error" role="alert" hidden></p><div class="dialog-actions"><button id="cancel-import">Cancel</button><button id="apply-import" class="ink">Replace recipe</button></div></dialog>
+  <noscript><p class="notice">Enable JavaScript to scale quantities. Nothing is sent to a server.</p></noscript>
+</body>
+</html>

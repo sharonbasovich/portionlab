@@ -1,0 +1,8 @@
+{
+  "name": "portionlab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A local kitchen worksheet with exact recipe scaling.",
+  "scripts": { "test": "node --test tests/*.test.js", "start": "node server.js" }
+}

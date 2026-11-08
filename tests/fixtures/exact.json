@@ -1,0 +1,26 @@
+{
+  "format": "portionlab",
+  "version": 1,
+  "recipe": {
+    "title": "Exact quantities test",
+    "basePortions": "3",
+    "targetPortions": "7",
+    "ingredients": [
+      {
+        "quantity": "1/3",
+        "unit": "cup",
+        "name": "synthetic grains"
+      },
+      {
+        "quantity": "0.1",
+        "unit": "kg",
+        "name": "synthetic peas"
+      },
+      {
+        "quantity": "",
+        "unit": "pinches",
+        "name": "unmeasured herbs"
+      }
+    ]
+  }
+}
