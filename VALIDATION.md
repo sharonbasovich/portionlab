@@ -5,14 +5,15 @@ production service or a tested cooking method.
 
 ## Automated checks
 
-`npm test` runs 39 tests with Node's built-in test runner. They cover exact
+`npm test` runs 43 tests with Node's built-in test runner. They cover exact
 arithmetic (including 5,000 seeded cases), input validation, synthetic JSON
 fixtures, persistence, recovery, Undo and targeted interaction callbacks.
 Some interaction checks use stubs and extracted callback bodies. These are
 not a substitute for running the app in a browser.
 
-The optional `regression` suite contains 11 DOM test groups covering raw
-line-break preservation, draft edits and pending-target reconciliation.
+The optional `regression` suite contains 15 DOM test groups covering raw
+line-break preservation, draft edits, pending-target reconciliation and
+dirty-draft leaving protection.
 Install its test-only dependency and run it separately:
 
 ```sh
@@ -22,7 +23,7 @@ node --test regression/*.test.cjs
 
 This does not add an app/runtime dependency. The harness uses a simulated DOM,
 including stubbed dialogs and file selection; it does not verify native browser
-prompts, printing, file chooser behavior or accessibility. These 11 groups passed for this maintenance update.
+prompts, printing, file chooser behavior or accessibility. These 15 groups passed for the dirty-draft exit correction.
 
 ## Actual Chromium checks (prior public baseline)
 
@@ -49,6 +50,16 @@ recovery, maximal strings, UTF-8 rather than character counts, and the inclusive
 file-size boundary. See `docs/BACKUP_SIZE.md` for the conservative bound. These
 are automated checks only; native file chooser/export and actual-browser
 acceptance have not been rerun for this maintenance update.
+
+## Dirty-draft exit correction
+
+The correction passed 43 Node tests and 15 optional JSDOM groups. New checks
+cover pristine and dirty editors, title and row edits, invalid and reverted
+input, reset/apply/discard, same-tab draft recovery, pending targets and storage
+failures. They verify the actual beforeunload callback requests protection for
+dirty drafts even with healthy storage. Native leaving-page prompts were not
+rerun or verified; browsers may suppress them, especially without prior user
+interaction. Reloads can also request this best-effort warning.
 
 ## Remaining limits
 
